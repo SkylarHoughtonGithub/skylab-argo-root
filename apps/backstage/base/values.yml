@@ -1,0 +1,32 @@
+backstage:
+  image:
+    repository: backstage
+    tag: latest
+  
+ingress:
+  enabled: true
+  className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+  
+  postgresql:
+    enabled: true
+    postgresqlUsername: backstage
+    auth:
+      database: backstage
+
+  config:
+    app:
+      title: Company Developer Portal
+    
+    organization:
+      name: Company Name
+    
+    catalog:
+      import:
+        entityFilename: catalog-info.yaml
+      rules:
+        - allow: [Component, System, API, Resource, Location]

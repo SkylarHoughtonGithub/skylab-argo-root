@@ -1,0 +1,129 @@
+backstage:
+  replicaCount: 1
+
+  image:
+    repository: ghcr.io/backstage/backstage
+    tag: "v1.21.0"
+    pullPolicy: IfNotPresent
+
+  # Service configuration
+  service:
+    type: ClusterIP
+    ports:
+      backend:
+        port: 80
+        targetPort: 7007
+      metrics:
+        port: 9797
+        targetPort: 9797
+
+  # Ingress configuration
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+      cert-manager.io/cluster-issuer: letsencrypt-staging  # for dev environment
+    hosts:
+      - host: backstage.dev.company.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: backstage-tls-dev
+        hosts:
+          - backstage.dev.company.com
+
+  # Resource limits
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 2000m
+      memory: 2048Mi
+
+  # Database configuration
+  postgresql:
+    enabled: true  # Set to false if using external database
+    auth:
+      database: backstage
+      username: backstage
+    primary:
+      persistence:
+        size: 1Gi
+
+  # Main Backstage configuration
+  config:
+    app:
+      baseUrl: https://backstage.dev.company.com
+      title: Company Developer Portal
+
+    backend:
+      baseUrl: https://backstage.dev.company.com
+      cors:
+        origin: https://backstage.dev.company.com
+      database:
+        client: pg
+        connection:
+          host: ${POSTGRES_HOST}
+          port: 5432
+          user: ${POSTGRES_USER}
+          password: ${POSTGRES_PASSWORD}
+
+    auth:
+      environment: development
+      providers:
+        github:
+          development:
+            clientId: ${AUTH_GITHUB_CLIENT_ID}
+            clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+
+    catalog:
+      import:
+        entityFilename: catalog-info.yaml
+        pullRequestBranchName: backstage-integration
+      rules:
+        - allow: [Component, System, API, Resource, Location]
+      locations:
+        - type: url
+          target: https://github.com/company/service-catalog/blob/main/catalog-info.yaml
+
+    techdocs:
+      builder: local
+      generator:
+        runIn: docker
+      publisher:
+        type: local
+
+    lighthouse:
+      baseUrl: https://backstage.dev.company.com/lighthouse-api
+
+    scaffolder:
+      github:
+        token: ${GITHUB_TOKEN}
+        visibility: public
+
+    # Integration configurations
+    integrations:
+      github:
+        - host: github.com
+          token: ${GITHUB_TOKEN}
+      gitlab:
+        - host: gitlab.com
+          token: ${GITLAB_TOKEN}
+
+  # Kubernetes specific configurations
+  extraEnvVars:
+    - name: NODE_ENV
+      value: development
+    - name: LOG_LEVEL
+      value: debug
+
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /metrics
+    prometheus.io/port: "9797"
