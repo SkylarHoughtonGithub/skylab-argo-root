@@ -1,0 +1,56 @@
+# apps/manifests/debug-pod/pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug-pod
+  labels:
+    app: debug-pod
+spec:
+  containers:
+  - name: debug
+    image: ubuntu:22.04
+    command: ['sleep', 'infinity']
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "128Mi"
+        cpu: "200m"
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+    env:
+    - name: TZ
+      value: "UTC"
+---
+# ServiceAccount with minimal permissions
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: debug-sa
+---
+# Role with basic permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: debug-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services"]
+  verbs: ["get", "list"]
+---
+# RoleBinding to tie it together
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: debug-rolebinding
+subjects:
+- kind: ServiceAccount
+  name: debug-sa
+roleRef:
+  kin
