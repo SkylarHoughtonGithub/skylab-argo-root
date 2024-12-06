@@ -1,0 +1,59 @@
+# bootstrap/root.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: root-appset
+  namespace: argocd
+spec:
+  generators:
+    # For Helm apps
+    - git:
+        repoURL: https://github.com/yourusername/yourrepo.git
+        revision: HEAD
+        directories:
+          - path: apps/helm/*
+    # For Kustomize apps
+    - git:
+        repoURL: https://github.com/yourusername/yourrepo.git
+        revision: HEAD
+        directories:
+          - path: apps/kustomize/*
+    # For plain manifests
+    - git:
+        repoURL: https://github.com/yourusername/yourrepo.git
+        revision: HEAD
+        directories:
+          - path: apps/manifests/*
+    # For other ApplicationSets
+    - git:
+        repoURL: https://github.com/yourusername/yourrepo.git
+        revision: HEAD
+        directories:
+          - path: appsets/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/yourusername/yourrepo.git
+        targetRevision: HEAD
+        path: '{{path}}'
+        # Automatically detect whether to use Helm or Kustomize
+        directory:
+          recurse: true
+          include: "*.yaml"
+        # Helm specific settings if Chart.yaml exists
+        helm:
+          valueFiles:
+            - values.yaml
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: env-promotion
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - app: backstage
+                  path: apps/helm/backstage
+          - list:
+              elements:
+                - env: dev
+                  namespace: dev
+                  cluster: https://kubernetes.default.svc
+                - env: staging
+                  namespace: staging
+                  cluster: https://kubernetes.default.svc
+                - env: prod
+                  namespace: prod
+                  cluster: https://kubernetes.default.svc
+  template:
+    metadata:
+      name: '{{app}}-{{env}}'
+      namespace: argocd
+      annotations:
+        argocd.argoproj.io/sync-wave: '{{env}}' # Controls promotion order
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/yourusername/yourrepo.git
+        targetRevision: HEAD
+        path: '{{path}}'
+        helm:
+          valueFiles:
+            - values.yaml
+            - values-{{env}}.yaml
+      destination:
+        server: '{{cluster}}'
+        namespace: '{{namespace}}'
+      syncPolicy:
+        automated:
+          # Dev auto-syncs, others need manual approval
+          selfHeal: '{{env == "dev"}}'
+          prune: '{{env == "dev"}}'
+        syncOptions:
+          - CreateNamespace=true
