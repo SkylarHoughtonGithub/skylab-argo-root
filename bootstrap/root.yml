@@ -5,86 +5,46 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    # For Helm and Kustomize apps
+    # For Helm apps
     - git:
         repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
         revision: HEAD
         directories:
           - path: apps/helm/*
+    # For Kustomize apps
+    - git:
+        repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
+        revision: HEAD
+        directories:
           - path: apps/kustomize/*
-      template:
-        metadata:
-          name: '{{path.basename}}'
-          namespace: argocd
-        spec:
-          project: default
-          source:
-            repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
-            targetRevision: HEAD
-            path: '{{path}}'
-            # Helm specific settings if Chart.yaml exists
-            helm:
-              valueFiles:
-                - values.yaml
-          destination:
-            server: https://kubernetes.default.svc
-            namespace: '{{path.basename}}'
-          syncPolicy:
-            automated:
-              prune: true
-              selfHeal: true
-            syncOptions:
-              - CreateNamespace=true
-
-    # For plain manifests (different template)
+    # For plain manifests
     - git:
         repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
         revision: HEAD
         directories:
           - path: apps/manifests/*
-      template:
-        metadata:
-          name: '{{path.basename}}'
-          namespace: argocd
-        spec:
-          project: default
-          source:
-            repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
-            targetRevision: HEAD
-            path: '{{path}}'
-            directory:
-              recurse: true
-              include: "*.yaml"
-          destination:
-            server: https://kubernetes.default.svc
-            namespace: '{{path.basename}}'
-          syncPolicy:
-            automated:
-              prune: true
-              selfHeal: true
-            syncOptions:
-              - CreateNamespace=true
-
-    # For ApplicationSets (different template)
+    # For other ApplicationSets
     - git:
         repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
         revision: HEAD
         directories:
           - path: appsets/*
-      template:
-        metadata:
-          name: 'appset-{{path.basename}}'
-          namespace: argocd
-        spec:
-          project: default
-          source:
-            repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
-            targetRevision: HEAD
-            path: '{{path}}'
-          destination:
-            server: https://kubernetes.default.svc
-            namespace: argocd
-          syncPolicy:
-            automated:
-              prune: true
-              selfHeal: true
+  template:
+    metadata:
+      name: '{{path.basename}}'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
+        targetRevision: HEAD
+        path: '{{path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
