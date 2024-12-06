@@ -1,0 +1,54 @@
+# bootstrap/root.yml
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: root-appset
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          # Cluster Generator
+          - clusters:
+              values:
+                environment: uat
+              selector:
+                matchLabels:
+                  environment: uat
+          # Directory Generator for apps
+          - git:
+              repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
+              revision: HEAD
+              directories:
+                - path: apps/helm/*
+                - path: apps/kustomize/*
+                - path: apps/manifests/*
+                - path: appsets/*
+  template:
+    metadata:
+      name: '{{path.basename}}-{{cluster}}-{{values.environment}}'
+      namespace: argocd
+      labels:
+        environment: '{{values.environment}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
+        targetRevision: HEAD
+        path: '{{path}}'
+        # Conditional source type settings
+        helm:
+          valueFiles:
+            - values.yml
+            - values-{{values.environment}}.yml
+        kustomize:
+          path: '{{path}}/envs/{{values.environment}}'
+      destination:
+        server: '{{server}}'
+        namespace: '{{path.basename}}-{{values.environment}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: backstage-prod
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - env: prod
+            path: apps/helm/backstage
+            cluster: https://kubernetes.default.svc
+  template:
+    metadata:
+      name: 'backstage-{{env}}'
+      namespace: argocd
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
+        targetRevision: HEAD
+        path: '{{path}}'
+        helm:
+          valueFiles:
+            - values.yml
+            - values-{{env}}.yml
+      destination:
+        server: '{{cluster}}'
+        namespace: 'backstage-{{env}}'
+      syncPolicy:
+        automated:
+          prune: false  # More cautious in prod
+          selfHeal: false
+        syncOptions:
+          - CreateNamespace=true
+      syncWindows:
+        - schedule: "0 2 * * *"
+          duration: "2h"
+          kind: allow
