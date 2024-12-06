@@ -41,8 +41,8 @@ spec:
           valueFiles:
             - values.yml
             - values-{{values.environment}}.yml
-        kustomize:
-          path: '{{path}}/envs/{{values.environment}}'
+        kustomize: {}
+          # path: '{{path}}/envs/{{values.environment}}'
       destination:
         server: '{{server}}'
         namespace: '{{path.basename}}-{{values.environment}}'
