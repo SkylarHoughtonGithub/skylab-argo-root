@@ -8,25 +8,25 @@ spec:
   generators:
     # For Helm apps
     - git:
-        repoURL: https://github.com/yourusername/yourrepo.git
+        repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
         revision: HEAD
         directories:
           - path: apps/helm/*
     # For Kustomize apps
     - git:
-        repoURL: https://github.com/yourusername/yourrepo.git
+        repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
         revision: HEAD
         directories:
           - path: apps/kustomize/*
     # For plain manifests
     - git:
-        repoURL: https://github.com/yourusername/yourrepo.git
+        repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
         revision: HEAD
         directories:
           - path: apps/manifests/*
     # For other ApplicationSets
     - git:
-        repoURL: https://github.com/yourusername/yourrepo.git
+        repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
         revision: HEAD
         directories:
           - path: appsets/*
@@ -37,7 +37,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: https://github.com/yourusername/yourrepo.git
+        repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
         targetRevision: HEAD
         path: '{{path}}'
         # Automatically detect whether to use Helm or Kustomize
