@@ -19,7 +19,7 @@ spec:
               repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
               revision: HEAD
               directories:
-                - path: apps/helm/*/
+                - path: apps/helm/*/*/
                 - path: apps/kustomize/*/overlays/regions/use/dev/
                 - path: apps/manifests/*/*/
                 - path: appsets/dev/use/
