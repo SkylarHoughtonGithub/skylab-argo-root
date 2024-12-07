@@ -15,5 +15,3 @@ backstage:
 
   postgresql:
     enabled: true
-    persistence:
-      enabled: true
