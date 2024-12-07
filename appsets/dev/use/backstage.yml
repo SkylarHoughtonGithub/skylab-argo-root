@@ -1,4 +1,4 @@
-# appsets/dev/use/backstage.yml
+# appsets/dev/use/backstage.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -29,8 +29,8 @@ spec:
         path: apps/helm/backstage  # Points to your Helm chart
         helm:
           valueFiles:
-            - values/global.yml
-            - values/regions/use/dev.yml
+            - values/global.yaml
+            - values/regions/use/dev.yaml
           values: |
             component: {{component}}
       destination:

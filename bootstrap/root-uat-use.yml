@@ -44,8 +44,8 @@
 #         path: '{{path}}'
 #         helm:
 #           valueFiles:
-#             - values/global.yml
-#             - values/regions/use/uat.yml
+#             - values/global.yaml
+#             - values/regions/use/uat.yaml
 #       destination:
 #         server: '{{server}}'
 #         namespace: '{{path.basename}}-uat'

@@ -46,8 +46,8 @@
 #         path: '{{path}}'
 #         helm:
 #           valueFiles:
-#             - values/global.yml
-#             - values/regions/use/prod.yml
+#             - values/global.yaml
+#             - values/regions/use/prod.yaml
 #       destination:
 #         server: '{{server}}'
 #         namespace: '{{path.basename}}-prod'
