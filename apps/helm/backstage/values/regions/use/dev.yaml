@@ -14,8 +14,4 @@ backstage:
       memory: "1Gi"
       cpu: "500m"
 
-  postgresql:
-    persistence:
-      size: "50Gi"
-
   replicaCount: 1
