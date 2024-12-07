@@ -23,6 +23,7 @@ spec:
                 - path: apps/kustomize/*/overlays/regions/use/dev/
                 - path: apps/manifests/*/*/
                 - path: appsets/dev/use/
+                - path: platform/*/regions/use/dev/  # Added platform path
   template:
     metadata:
       name: '{{path.basename}}-{{values.environment}}'
@@ -45,6 +46,6 @@ spec:
       syncPolicy:
         automated:
           prune: true
-          selfHeal: true       # Changed from variable to boolean
+          selfHeal: true
         syncOptions:
           - CreateNamespace=true
