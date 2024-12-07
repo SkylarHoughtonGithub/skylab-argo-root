@@ -10,7 +10,6 @@ spec:
           - list:
               elements:
                 - environment: dev
-                  targetRevision: HEAD
           - clusters:
               selector:
                 matchLabels:
@@ -26,38 +25,26 @@ spec:
                 - path: appsets/dev/use/
   template:
     metadata:
-      name: '{{path.basename}}-use-dev'
+      name: '{{path.basename}}-{{values.environment}}'
       namespace: argocd
-      annotations:
-        argocd.argoproj.io/sync-wave: "1"
-        promotion.env.apps/next: "uat-use"
-        promotion.env.apps/requires-approval: "true"
       labels:
-        environment: dev
-        region: use
+        environment: '{{values.environment}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
-        targetRevision: '{{targetRevision}}'
+        targetRevision: HEAD
         path: '{{path}}'
         helm:
           valueFiles:
-            - values/global.yml
-            - values/regions/use/dev.yml
+            - values/global.yaml
+            - values/regions/use/{{values.environment}}.yaml
       destination:
         server: '{{server}}'
-        namespace: '{{path.basename}}-dev'
+        namespace: '{{path.basename}}-{{values.environment}}'
       syncPolicy:
         automated:
           prune: true
-          selfHeal: true
+          selfHeal: true       # Changed from variable to boolean
         syncOptions:
           - CreateNamespace=true
-          - ApplyOutOfSyncOnly=true
-        retry:
-          limit: 5
-          backoff:
-            duration: 5s
-            factor: 2
-            maxDuration: 3m
