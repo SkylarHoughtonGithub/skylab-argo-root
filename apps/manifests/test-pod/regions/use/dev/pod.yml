@@ -1,4 +1,4 @@
-# apps/manifests/debug-pod/pod.yaml
+# apps/manifests/debug-pod/pod.yml
 apiVersion: v1
 kind: Pod
 metadata:

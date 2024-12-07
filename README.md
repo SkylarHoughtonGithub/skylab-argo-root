@@ -2,28 +2,28 @@
 ├── apps/
 │   └── backstage/
 │       ├── base/
-│       │   ├── kustomization.yaml
-│       │   ├── deployment.yaml
-│       │   ├── service.yaml
-│       │   ├── ingress.yaml
-│       │   └── config.yaml
+│       │   ├── kustomization.yml
+│       │   ├── deployment.yml
+│       │   ├── service.yml
+│       │   ├── ingress.yml
+│       │   └── config.yml
 │       └── overlays/
 │           ├── dev/
-│           │   ├── kustomization.yaml
-│           │   ├── config-patch.yaml
-│           │   └── ingress-patch.yaml
+│           │   ├── kustomization.yml
+│           │   ├── config-patch.yml
+│           │   └── ingress-patch.yml
 │           └── prod/
-│               ├── kustomization.yaml
-│               ├── config-patch.yaml
-│               └── ingress-patch.yaml
+│               ├── kustomization.yml
+│               ├── config-patch.yml
+│               └── ingress-patch.yml
 ├── infrastructure/
 │   ├── namespaces/
-│   │   └── backstage.yaml
+│   │   └── backstage.yml
 │   └── secrets/
-│       ├── dev-secrets.yaml
-│       └── prod-secrets.yaml
+│       ├── dev-secrets.yml
+│       └── prod-secrets.yml
 └── clusters/
     ├── dev/
-    │   └── backstage.yaml
+    │   └── backstage.yml
     └── prod/
-        └── backstage.yaml
+        └── backstage.yml

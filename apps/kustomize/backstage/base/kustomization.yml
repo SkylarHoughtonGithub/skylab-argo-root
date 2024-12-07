@@ -1,4 +1,4 @@
-# apps/backstage/base/kustomization.yaml
+# apps/backstage/base/kustomization.yml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -9,4 +9,4 @@ configMapGenerator:
       - CHART_VERSION=1.0.0
 
 resources:
-  - servicemonitor.yaml
+  - servicemonitor.yml

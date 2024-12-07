@@ -1,0 +1,20 @@
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: prod_use-secret
+#   namespace: argocd
+#   labels:
+#     argocd.argoproj.io/secret-type: cluster
+#     environment: dev
+# type: Opaque
+# stringData:
+#   name: prod_use
+#   server: https://kubernetes.dev.example.com
+#   config: |
+#     {
+#       "bearerToken": "<token>",
+#       "tlsClientConfig": {
+#         "insecure": false,
+#         "caData": "<base64-ca-data>"
+#       }
+#     }

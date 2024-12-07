@@ -1,0 +1,42 @@
+# appsets/dev/use/backstage.yml
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: backstage-dev-use
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: backstage
+            component: main
+          - name: backstage
+            component: postgres  # If you have separate components
+  template:
+    metadata:
+      name: '{{name}}-{{component}}-dev-use'
+      namespace: argocd
+      labels:
+        app: backstage
+        component: '{{component}}'
+        environment: dev
+        region: use
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
+        targetRevision: HEAD
+        path: apps/helm/backstage  # Points to your Helm chart
+        helm:
+          valueFiles:
+            - values/global.yml
+            - values/regions/use/dev.yml
+          values: |
+            component: {{component}}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: backstage-dev
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

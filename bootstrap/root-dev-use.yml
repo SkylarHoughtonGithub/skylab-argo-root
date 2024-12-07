@@ -1,0 +1,65 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: root-dev-use
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - environment: dev
+                  allowAutoSync: true
+                  allowAutoPromotion: true
+                  targetRevision: HEAD
+          - clusters:
+              selector:
+                matchLabels:
+                  environment: dev
+                  region: use
+          - git:
+              repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
+              revision: HEAD
+              directories:
+                - path: apps/helm/*/*/
+                - path: apps/kustomize/*/overlays/regions/use/dev/
+                - path: apps/manifests/*/*/
+                - path: appsets/dev/use/
+  template:
+    metadata:
+      name: '{{path.basename}}-use-dev'
+      namespace: argocd
+      annotations:
+        argocd.argoproj.io/sync-wave: "1"
+        promotion.env.apps/next: "uat-use"
+        promotion.env.apps/requires-approval: "true"
+      labels:
+        environment: dev
+        region: use
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
+        targetRevision: '{{targetRevision}}'
+        path: '{{path}}'
+        helm:
+          valueFiles:
+            - values/global.yml
+            - values/regions/use/dev.yml
+      destination:
+        server: '{{server}}'
+        namespace: '{{path.basename}}-dev'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: '{{allowAutoSync}}'
+        syncOptions:
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true
+        retry:
+          limit: 5
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m

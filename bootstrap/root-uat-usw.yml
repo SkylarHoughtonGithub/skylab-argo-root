@@ -1,0 +1,67 @@
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: root-uat-usw
+#   namespace: argocd
+# spec:
+#   generators:
+#     - matrix:
+#         generators:
+#           - list:
+#               elements:
+#                 - environment: uat
+#                   allowAutoSync: true
+#                   allowAutoPromotion: false
+#                   targetRevision: HEAD
+#           - clusters:
+#               selector:
+#                 matchLabels:
+#                   environment: uat
+#                   region: usw
+#           - git:
+#               repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
+#               revision: HEAD
+#               directories:
+#                 - path: apps/helm/*/*/
+#                 - path: apps/kustomize/*/overlays/regions/usw/uat/
+#                 - path: apps/manifests/*/*/
+#                 - path: appsets/uat/usw/
+#   template:
+#     metadata:
+#       name: '{{path.basename}}-usw-uat'
+#       namespace: argocd
+#       annotations:
+#         argocd.argoproj.io/sync-wave: "1"
+#         promotion.env.apps/next: "prod-usw"
+#         promotion.env.apps/requires-approval: "true"
+#         promotion.env.apps/required-tests: "integration,security"
+#       labels:
+#         environment: uat
+#         region: usw
+#     spec:
+#       project: default
+#       source:
+#         repoURL: https://github.com/SkylarHoughtonGithub/shoutsky-argo.git
+#         targetRevision: '{{targetRevision}}'
+#         path: '{{path}}'
+#         helm:
+#           valueFiles:
+#             - values/global.yml
+#             - values/regions/usw/uat.yml
+#       destination:
+#         server: '{{server}}'
+#         namespace: '{{path.basename}}-uat'
+#       syncPolicy:
+#         automated:
+#           prune: true
+#           selfHeal: '{{allowAutoSync}}'
+#         syncOptions:
+#           - CreateNamespace=true
+#           - ApplyOutOfSyncOnly=true
+#           - ValidateSpec=true
+#         retry:
+#           limit: 3
+#           backoff:
+#             duration: 10s
+#             factor: 2
+#             maxDuration: 5m

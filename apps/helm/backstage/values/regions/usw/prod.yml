@@ -1,0 +1,21 @@
+backstage:
+  image:
+    tag: "v1.0.0"  # Use specific version in prod
+    pullPolicy: Always
+
+  ingress:
+    host: backstage-usw.prod.example.com
+
+  resources:
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
+    requests:
+      memory: "1Gi"
+      cpu: "500m"
+
+  postgresql:
+    persistence:
+      size: "50Gi"
+
+  replicaCount: 2

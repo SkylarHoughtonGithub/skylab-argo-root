@@ -4,7 +4,7 @@ backstage:
     pullPolicy: Always
 
   ingress:
-    host: backstage.prod.example.com
+    host: backstage-use.dev.example.com
 
   resources:
     limits:
@@ -18,4 +18,4 @@ backstage:
     persistence:
       size: "50Gi"
 
-  replicaCount: 2
+  replicaCount: 1
