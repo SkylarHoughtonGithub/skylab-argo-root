@@ -10,8 +10,6 @@ spec:
           - list:
               elements:
                 - environment: dev
-                  allowAutoSync: true
-                  allowAutoPromotion: true
                   targetRevision: HEAD
           - clusters:
               selector:
@@ -53,7 +51,7 @@ spec:
       syncPolicy:
         automated:
           prune: true
-          selfHeal: '{{allowAutoSync}}'
+          selfHeal: true
         syncOptions:
           - CreateNamespace=true
           - ApplyOutOfSyncOnly=true

@@ -10,8 +10,6 @@
 #           - list:
 #               elements:
 #                 - environment: uat
-#                   allowAutoSync: true
-#                   allowAutoPromotion: false
 #                   targetRevision: HEAD
 #           - clusters:
 #               selector:
@@ -54,7 +52,7 @@
 #       syncPolicy:
 #         automated:
 #           prune: true
-#           selfHeal: '{{allowAutoSync}}'
+#           selfHeal: true
 #         syncOptions:
 #           - CreateNamespace=true
 #           - ApplyOutOfSyncOnly=true
