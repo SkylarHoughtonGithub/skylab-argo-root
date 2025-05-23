@@ -12,7 +12,7 @@ spec:
   source:
     repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-workloads
     targetRevision: HEAD
-    path: applicationsets/workloads
+    path: workloads
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

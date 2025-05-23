@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-bootstrap
     targetRevision: HEAD
-    path: applicationsets/infrastructure
+    path: infrastructure
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
