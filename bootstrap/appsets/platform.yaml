@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: platform-appsets
+  name: platform
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
