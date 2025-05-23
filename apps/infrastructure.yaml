@@ -1,18 +1,15 @@
-
 ---
 apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
+kind: Application
 metadata:
-  name: workloads
+  name: infrastructure
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "2"
 spec:
   project: default
   source:
-    repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-workloads
+    repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-bootstrap
     targetRevision: HEAD
-    path: workloads
+    path: infrastructure
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
