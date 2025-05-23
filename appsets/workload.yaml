@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: workload
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-workloads
+      revision: HEAD
+      directories:
+      - path: workload/*
+      values:
+        clusterName: argo-lab
+        clusterServer: https://kubernetes.default.svc
+        environment: dev
+  template:
+    metadata:
+      name: '{{values.clusterName}}-{{path.basename}}-{{values.environment}}'
+      labels:
+        cluster: '{{values.clusterName}}'
+        environment: '{{values.environment}}'
+        component: infra
+        service: '{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-workloads
+        targetRevision: HEAD
+        path: '{{path}}/{{values.environment}}'
+      destination:
+        server: '{{values.clusterServer}}'
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true

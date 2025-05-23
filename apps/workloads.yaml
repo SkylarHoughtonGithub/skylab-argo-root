@@ -10,7 +10,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-workloads
+    repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-root
     targetRevision: HEAD
     path: appsets/workloads
   destination:

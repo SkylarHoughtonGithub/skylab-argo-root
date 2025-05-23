@@ -9,7 +9,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-bootstrap
+    repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-root
     targetRevision: HEAD
     path: appsets/platform
   destination:
