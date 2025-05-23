@@ -1,8 +1,0 @@
-apiVersion: v2
-name: backstage
-description: Backstage deployment configuration
-version: 0.1.0
-dependencies:
-  - name: backstage
-    version: 1.8.2
-    repository: https://backstage.github.io/charts
