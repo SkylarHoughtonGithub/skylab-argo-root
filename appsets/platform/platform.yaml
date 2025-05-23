@@ -6,7 +6,7 @@ metadata:
 spec:
   generators:
   - git:
-      repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-workloads
+      repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-bootstrap
       revision: HEAD
       directories:
       - path: platform/*
@@ -25,7 +25,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-workloads
+        repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-bootstrap
         targetRevision: HEAD
         path: '{{path}}/{{values.environment}}'
       destination:
