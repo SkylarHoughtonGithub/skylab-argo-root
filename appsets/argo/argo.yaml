@@ -11,7 +11,7 @@ spec:
       directories:
       - path: argo/*
       values:
-        clusterName: argo-lab
+        clusterName: argo-root
         clusterServer: https://kubernetes.default.svc
         environment: dev
   template:
@@ -20,7 +20,7 @@ spec:
       labels:
         cluster: '{{values.clusterName}}'
         environment: '{{values.environment}}'
-        component: argo
+        component: argo-root
         service: '{{path.basename}}'
     spec:
       project: default
