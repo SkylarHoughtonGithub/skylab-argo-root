@@ -1,7 +1,7 @@
 argo-cd:
   createAggregateRoles: true
   global:
-    domain: argocd.dev.example.com
+    domain: argocd-dev.local
 
   configs:
     cm:
@@ -33,3 +33,22 @@ argo-cd:
     serviceAccount:
       create: true  
       name: argocd-repo-server
+
+  dex:
+  serviceAccount:
+    create: true
+    name: argocd-dex-server
+
+  redis:
+    serviceAccount:
+      create: false
+
+  applicationSet:
+    serviceAccount:
+      create: true
+      name: argocd-applicationset-controller
+
+  notifications:
+    serviceAccount:
+      create: true
+      name: argocd-notifications-controller
