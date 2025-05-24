@@ -4,9 +4,6 @@ kind: Kustomization
 
 namespace: argocd
 
-resources:
-- manifests/namespace.yaml
-
 helmCharts:
 - name: argocd
   repo: https://argoproj.github.io/argo-helm
