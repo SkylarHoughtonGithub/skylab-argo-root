@@ -1,4 +1,5 @@
 argo-cd:
+  createAggregateRoles: true
   global:
     domain: argocd.dev.example.com
 
@@ -16,3 +17,19 @@ argo-cd:
           generate:
             command: ["sh", "-c"]
             args: ["sops -d $ARGOCD_APP_SOURCE_PATH/secrets.enc.yaml"]
+
+    serviceAccount:
+      create: true
+      name: argocd-server
+      automountServiceAccountToken: true
+      annotations: {}
+
+  controller:
+    serviceAccount:
+      create: true
+      name: argocd-application-controller
+
+  repoServer:
+    serviceAccount:
+      create: true  
+      name: argocd-repo-server
