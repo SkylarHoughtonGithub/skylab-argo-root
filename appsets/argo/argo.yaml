@@ -16,7 +16,7 @@ spec:
         environment: dev
   template:
     metadata:
-      name: '{{values.clusterName}}-{{path.basename}}-{{values.environment}}'
+      name: '{{values.clusterName}}-{{path.basename}}'
       labels:
         cluster: '{{values.clusterName}}'
         environment: '{{values.environment}}'

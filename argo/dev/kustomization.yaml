@@ -8,7 +8,7 @@ resources:
 - manifests/namespace.yaml
 
 helmCharts:
-- name: argo-cd
+- name: argocd
   repo: https://argoproj.github.io/argo-helm
   version: 5.51.6
   releaseName: argocd
