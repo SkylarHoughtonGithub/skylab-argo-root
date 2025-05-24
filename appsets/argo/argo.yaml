@@ -27,7 +27,7 @@ spec:
       source:
         repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-root
         targetRevision: HEAD
-        path: '{{path}}/{{values.environment}}'
+        path: '{{path}}'
       destination:
         server: '{{values.clusterServer}}'
         namespace: '{{path.basename}}'
