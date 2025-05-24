@@ -1,0 +1,9 @@
+apiVersion: v2
+name: argocd-platform
+description: ArgoCD with platform-specific configurations
+version: 1.0.0
+
+dependencies:
+- name: argo-cd
+  version: "7.7.11"
+  repository: "https://argoproj.github.io/argo-helm"

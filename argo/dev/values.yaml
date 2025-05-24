@@ -1,0 +1,18 @@
+argo-cd:
+  global:
+    domain: argocd.dev.example.com
+
+  configs:
+    cm:
+      kustomize.buildOptions: "--enable-helm"
+  params:
+    server.insecure: true
+    server.disable.auth: false
+
+  server:
+    config:
+      configManagementPlugins: |
+        - name: sops
+          generate:
+            command: ["sh", "-c"]
+            args: ["sops -d $ARGOCD_APP_SOURCE_PATH/secrets.enc.yaml"]
