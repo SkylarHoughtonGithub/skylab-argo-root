@@ -1,7 +1,7 @@
 argo-cd:
   createAggregateRoles: true
   global:
-    domain: argocd-dev.local
+    domain: argocd.local
 
   configs:
     cm:
