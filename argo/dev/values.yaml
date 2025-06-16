@@ -1,54 +1,19 @@
-argo-cd:
-  createAggregateRoles: true
-  global:
-    domain: argocd.local
+createAggregateRoles: true
+namespaceOverride: argocd
+global:
+  domain: argocd.local
 
-  configs:
-    cm:
-      kustomize.buildOptions: "--enable-helm"
-  params:
-    server.insecure: true
-    server.disable.auth: false
+configs:
+  cm:
+    kustomize.buildOptions: "--enable-helm"
+params:
+  server.insecure: true
+  server.disable.auth: false
 
-  server:
-    config:
-      configManagementPlugins: |
-        - name: sops
-          generate:
-            command: ["sh", "-c"]
-            args: ["sops -d $ARGOCD_APP_SOURCE_PATH/secrets.enc.yaml"]
-
-    serviceAccount:
-      create: true
-      name: argocd-server
-      automountServiceAccountToken: true
-      annotations: {}
-
-  controller:
-    serviceAccount:
-      create: true
-      name: argocd-application-controller
-
-  repoServer:
-    serviceAccount:
-      create: true  
-      name: argocd-repo-server
-
-  dex:
-  serviceAccount:
-    create: true
-    name: argocd-dex-server
-
-  redis:
-    serviceAccount:
-      create: false
-
-  applicationSet:
-    serviceAccount:
-      create: true
-      name: argocd-applicationset-controller
-
-  notifications:
-    serviceAccount:
-      create: true
-      name: argocd-notifications-controller
+server:
+  config:
+    configManagementPlugins: |
+      - name: sops
+        generate:
+          command: ["sh", "-c"]
+          args: ["sops -d $ARGOCD_APP_SOURCE_PATH/secrets.enc.yaml"]
