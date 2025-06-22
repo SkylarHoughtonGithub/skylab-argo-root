@@ -1,1 +1,0 @@
-kubectl patch configmap argocd-cm -n argocd --patch '{"data":{"kustomize.buildOptions":"--enable-helm"}}'
