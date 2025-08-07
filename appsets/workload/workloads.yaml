@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: workload
+  name: workloads
   namespace: argocd
 spec:
   generators:
@@ -9,7 +9,7 @@ spec:
       repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-workloads
       revision: HEAD
       directories:
-      - path: workload/*
+      - path: workloads/*
       values:
         clusterName: argo-lab
         clusterServer: https://kubernetes.default.svc
@@ -20,7 +20,7 @@ spec:
       labels:
         cluster: '{{values.clusterName}}'
         environment: '{{values.environment}}'
-        component: infra
+        component: workloads
         service: '{{path.basename}}'
     spec:
       project: default
