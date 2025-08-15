@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: platform-prod
+  namespace: argocd
+spec:
+  generators:
+  - matrix:
+      generators:
+      - git:
+          repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-bootstrap
+          revision: HEAD
+          directories:
+          - path: platform/*
+          values:
+            environment: prod
+      - clusters:
+          selector:
+            matchLabels:
+              environment: "prod"
+          values:
+            environment: prod
+  template:
+    metadata:
+      name: '{{name}}-{{path.basename}}-{{values.environment}}'
+      labels:
+        cluster: '{{name}}'
+        environment: '{{values.environment}}'
+        component: platform
+        service: '{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/SkylarHoughtonGithub/skylab-argo-bootstrap
+        targetRevision: HEAD
+        path: '{{path}}/{{values.environment}}'
+      destination:
+        server: '{{server}}'
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
