@@ -28,8 +28,6 @@ spec:
         environment: '{{values.environment}}'
         component: workloads
         service: '{{path.basename}}'
-        cluster-type: '{{path.path[1]}}'
-        cluster-name: '{{path.path[2]}}'
         layer: workloads
     spec:
       project: default

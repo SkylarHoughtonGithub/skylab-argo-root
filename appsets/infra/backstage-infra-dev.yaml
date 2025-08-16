@@ -28,8 +28,6 @@ spec:
         environment: '{{values.environment}}'
         component: infra
         service: '{{path.basename}}'
-        cluster-type: '{{path.path[1]}}'
-        cluster-name: '{{path.path[2]}}'
         layer: infra
     spec:
       project: default
