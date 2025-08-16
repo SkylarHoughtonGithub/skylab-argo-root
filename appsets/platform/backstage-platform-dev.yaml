@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: backstage-platform-dev
+  namespace: argocd
+spec:
+  generators:
+  - matrix:
+      generators:
+      - git:
+          repoURL: https://github.com/SkylarHoughtonGithub/skylab-backstage-configs
+          revision: HEAD
+          directories:
+          - path: dev/*/*/platform/*
+          values:
+            environment: dev
+      - clusters:
+          selector:
+            matchLabels:
+              environment: "dev"
+          values:
+            environment: dev
+  template:
+    metadata:
+      name: '{{name}}-{{path.basename}}-platform-{{values.environment}}'
+      labels:
+        cluster: '{{name}}'
+        environment: '{{values.environment}}'
+        component: platform
+        service: '{{path.basename}}'
+        cluster-type: '{{path.path[1]}}'
+        cluster-name: '{{path.path[2]}}'
+        layer: platform
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/SkylarHoughtonGithub/skylab-backstage-configs
+        targetRevision: HEAD
+        path: '{{path}}'
+      destination:
+        server: '{{server}}'
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
