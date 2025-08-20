@@ -11,7 +11,7 @@ spec:
           repoURL: https://github.com/SkylarHoughtonGithub/skylab-backstage-configs
           revision: HEAD
           directories:
-          - path: dev/*/*/infra/*
+          - path: dev/*/*/infra/*/*
           values:
             environment: dev
       - clusters:
