@@ -17,7 +17,8 @@ spec:
       - clusters:
           selector:
             matchLabels:
-              environment: "dev"
+              environment: dev
+              cluster-type: workload
           values:
             environment: dev
   template:
